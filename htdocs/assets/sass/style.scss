@@ -1,0 +1,18 @@
+@import "mixin";
+body{
+	margin: 0;
+	padding: 0;
+}
+section{
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 6rem;
+	color: #eeeeee;
+	background-color: #993300;
+	&:nth-child(2n){
+		background-color: #003399;
+	}
+}

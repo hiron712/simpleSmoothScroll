@@ -1,0 +1,214 @@
+@mixin css3($property, $value) {
+    @each $prefix in -webkit-, -moz-, -ms-, -o-, '' {
+      #{$prefix}#{$property}: $value;
+    }
+  }
+  @mixin fontsize($size: 24, $base: 14) {
+    font-size: $size + px;
+    font-size: ($size / $base) * 1rem;
+  }
+  @mixin opacity($opacity) {
+    -webkit-opacity: $opacity;
+    -moz-opacity: $opacity;
+    -o-opacity: $opacity;
+    opacity: $opacity;
+    //-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=" + $opacity-ie + ")";
+    //-ms-filter: "alpha(opacity="+ $opacity-ie + ")"; /* IE 8 */
+    $opacity-ie: $opacity * 100;
+    filter: alpha(opacity=$opacity-ie); //IE8
+  }
+  //clear fix
+  @mixin clearfix() {
+    &:before,
+    &:after {
+      content: "";
+      display: table;
+    }
+    &:after {
+      clear: both;
+    }
+  }
+  @mixin rotate( $degrees ) {
+    -webkit-transform: rotate(#{$degrees}deg);
+    -moz-transform: rotate(#{$degrees}deg);
+    -ms-transform: rotate(#{$degrees}deg);
+    -o-transform: rotate(#{$degrees}deg);
+    transform: rotate(#{$degrees}deg);
+    filter:  progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand', M11=#{cos($degrees)}, M12=-#{sin($degrees)}, M21=#{sin($degrees)}, M22=#{cos($degrees)});
+    -ms-filter: "progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand', M11=#{cos($degrees)}, M12=-#{sin($degrees)}, M21=#{sin($degrees)}, M22=#{cos($degrees)})";
+    zoom: 1;
+  }
+  @mixin gradient($fromColor, $toColor) {
+    background-color: $toColor; /* Fallback Color */
+    background-image: -webkit-gradient(linear, left top, left bottom, from($fromColor), to($toColor)); /* Saf4+, Chrome */
+    background-image: -webkit-linear-gradient(top, $fromColor, $toColor); /* Chrome 10+, Saf5.1+, iOS 5+ */
+    background-image:    -moz-linear-gradient(top, $fromColor, $toColor); /* FF3.6 */
+    background-image:     -ms-linear-gradient(top, $fromColor, $toColor); /* IE10 */
+    background-image:      -o-linear-gradient(top, $fromColor, $toColor); /* Opera 11.10+ */
+    background-image:         linear-gradient(top, $fromColor, $toColor);
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#{$fromColor}', EndColorStr='#{$toColor}');
+  }
+  @mixin box_shadow($value...) {
+    /*-webkit-box-shadow: $value;
+           -moz-box-shadow: $value;
+              -ms-box-shadow: $value;
+                      box-shadow: $value;*/
+    @include css3(box-shadow,$value);
+  }
+  @mixin text-shadow($value...) {
+    text-shadow: $value;
+  }
+  @mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -mos-border-radius: $radius;
+    -o-border-radius: $radius;
+    border-radius: $radius;
+    background-clip: padding-box;  /* stops bg color from leaking outside the border: */
+  }
+  @mixin transition($time:500ms) {
+    -webkit-transition: all $time cubic-bezier(0.165, 0.84, 0.44, 1);
+    -moz-transition: all $time cubic-bezier(0.165, 0.84, 0.44, 1);
+    -o-transition: all $time cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all $time cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+  @mixin transitionNone() {
+    -webkit-transition: none;
+    -moz-transition: none;
+    //-ms-transition: none;
+    -o-transition: none;
+    transition: none;
+  }
+  // Single side border-radius
+  @mixin border-top-radius($radius) {
+    -webkit-border-top-right-radius: $radius;
+    border-top-right-radius: $radius;
+    -webkit-border-top-left-radius: $radius;
+    border-top-left-radius: $radius;
+    background-clip: padding-box;
+  }
+  @mixin border-right-radius($radius) {
+    -webkit-border-bottom-right-radius: $radius;
+    border-bottom-right-radius: $radius;
+    -webkit-border-top-right-radius: $radius;
+    border-top-right-radius: $radius;
+    background-clip: padding-box;
+  }
+  @mixin border-bottom-radius($radius) {
+    -webkit-border-bottom-right-radius: $radius;
+    border-bottom-right-radius: $radius;
+    -webkit-border-bottom-left-radius: $radius;
+    border-bottom-left-radius: $radius;
+    background-clip: padding-box;
+  }
+  @mixin border-left-radius($radius) {
+    -webkit-border-bottom-left-radius: $radius;
+    border-bottom-left-radius: $radius;
+    -webkit-border-top-left-radius: $radius;
+    border-top-left-radius: $radius;
+    background-clip: padding-box;
+  }
+  @mixin box-sizing($box-model) {
+    -webkit-box-sizing: $box-model;
+    -moz-box-sizing: $box-model;
+    -ms-box-sizing: $box-model;
+    -o-box-sizing: $box-model;
+    box-sizing:$box-model;
+  }
+  @mixin htc_pie() {
+    -ms-behavior: url(PIE.htc);
+  }
+  @mixin htc_backgroundsize() {
+    -ms-behavior: url(backgroundsize.min.htc);
+  }
+  // keyframes mixin
+  @mixin keyframes($name) {
+    @-webkit-keyframes #{$name} {
+      @content;
+    }
+    @-moz-keyframes #{$name} {
+      @content;
+    }
+    @-ms-keyframes #{$name} {
+      @content;
+    }
+    @keyframes #{$name} {
+      @content;
+    }
+  }
+  @mixin placeholder(){
+    &::-webkit-input-placeholder{
+      @content;
+    }
+    &:-ms-input-placeholder{
+      @content;
+    }
+    &::-moz-placeholder{
+      @content;
+    }
+  }
+  @mixin screen($break-point-min, $break-point-max) {
+    @media screen and (min-width: $break-point-min) and (max-width: $break-point-max) {
+      @content;
+    }
+  }
+  @mixin min-screen($break-point-min) {
+    @media screen and (min-width: $break-point-min) {
+      @content;
+    }
+  }
+  
+  @mixin flex() {
+    display: -webkit-box; //この辺が
+    display: -webkit-flex; //Android2.3~とか
+    display: -ms-flexbox; //IE9~用
+    display: flex; //最新のブラウザのみであればflexだけでもよいかも
+  }
+  
+  @mixin ellipsis(){
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+  }
+  
+  @mixin sp_box_scroll(){
+    overflow: auto;
+    html.isTouch &{
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+  }
+  
+  @mixin hoverOpacity(){
+    &:hover{
+      opacity:0.7;
+    }
+  }
+  
+  @mixin ipad(){
+    @media screen and (min-height: 850px) and (max-height: 1024px) {
+      @content;
+    }
+  }
+  
+  @mixin sp(){
+    @media screen and (max-width: 812px) {  //px812
+      body.home,
+      body.favorite,
+      body.imageedit {
+        @content;
+      }
+    }
+  }
+  
+  @mixin smooth(){
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch
+  }
+  
+  @mixin nosel(){
+    user-select: none; // CSS3
+    -moz-user-select: none; // Firefox
+    -webkit-user-select: none; // Safari、Chromeなど
+    -ms-user-select: none; // IE10かららしい
+  }
