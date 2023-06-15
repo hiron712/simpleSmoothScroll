@@ -74,7 +74,9 @@ export default class simpleSmoothScroll {
     window.addEventListener('keyup',(e)=>{
       scrl = self.arrivalTop = self.scrollTop();
     },{passive:false});
-
+    window.addEventListener('scroll',(e)=>{
+      scrl = self.scrollTop();
+    },{passive:false});
     function step(){
       scrl += (self.arrivalTop - scrl) * self.option.deceleration;
 
