@@ -3,6 +3,31 @@ body{
 	margin: 0;
 	padding: 0;
 }
+
+nav{
+	background-color: #ffffffcc;
+	border-radius: 0.5rem;
+	position: fixed;
+	left: 3%;
+	right: 3%;
+	top: 20px;
+	ul,li{
+		list-style: none;
+	}
+	ul{
+		display: flex;
+		flex-wrap: wrap;
+		li{
+			a{
+				display: block;
+				padding: 0.5rem 1.5rem;
+				text-decoration: none;
+				color: #000000;
+				font-weight: bold;
+			}
+		}
+	}
+}
 section{
 	width: 100vw;
 	height: 100vh;

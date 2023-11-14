@@ -46,6 +46,17 @@ export default class simpleSmoothScroll {
   getStyle(element){
     return (element.currentStyle || document.defaultView.getComputedStyle(element, ''));
   }
+  iframeScroll(flg){
+    flg = flg || false;
+    let iframe = document.querySelectorAll('iframe');
+    iframe.forEach(($iframe)=>{
+      if(flg){
+        $iframe.style.pointerEvents = 'none';
+      }else{
+        $iframe.style.pointerEvents = 'auto';
+      }
+    });
+  }
   start(){
     let self = this;
     let scrl = self.scrollTop();
@@ -60,9 +71,35 @@ export default class simpleSmoothScroll {
     let htmlStyle = self.getStyle($html);
     let htmlTop = parseInt(htmlStyle.marginTop);
 
+    window.addEventListener('load',()=>{
+      setTimeout(()=>{
+        self.arrivalTop = self.scrollTop();
+      },10);
+    },false);
+
+    document.addEventListener("DOMContentLoaded", ()=>{
+      let anchor = document.querySelectorAll('a[href^="#"]');
+
+      anchor.forEach(($anchor)=>{
+        $anchor.addEventListener('click',(e)=>{
+          e.preventDefault();
+          count = 0;
+          let href = e.currentTarget.getAttribute('href');
+          self.scrollTo(href);
+          return false;
+        },false);
+      });
+    });
+
     window.addEventListener('wheel',(e)=>{
-      if(e.preventDefault) e.preventDefault();
-      if(e.stopPropagation) e.stopPropagation();
+      let $dialog = document.querySelectorAll('dialog[open]');
+      if($dialog.length > 0){
+        return false;
+      } else{
+        if(e.preventDefault) e.preventDefault();
+        if(e.stopPropagation) e.stopPropagation();
+      }
+
       let y = e.deltaY;
 
       self.arrivalTop += y * self.option.distance;
@@ -76,6 +113,7 @@ export default class simpleSmoothScroll {
       cancelAnimationFrame(scrtmr);
       scrtmr = requestAnimationFrame(step);
       cancelAnimationFrame(scrchk);
+      self.iframeScroll(true);
     },{passive:false});
 
     window.addEventListener('touchend',(e)=>{
@@ -88,6 +126,7 @@ export default class simpleSmoothScroll {
     window.addEventListener('scroll',(e)=>{
       scrl = self.scrollTop();
     },{passive:false});
+
     function step(){
       scrl += (self.arrivalTop - scrl) * self.option.deceleration;
 
@@ -99,6 +138,9 @@ export default class simpleSmoothScroll {
         window.scrollTo(0,self.arrivalTop);
         cancelAnimationFrame(scrtmr);
       }else{
+        if(Math.abs(self.arrivalTop - scrl) < 20){
+          self.iframeScroll(false);
+        }
         scrtmr = requestAnimationFrame(step);
       }
     }
@@ -107,6 +149,7 @@ export default class simpleSmoothScroll {
       margin = margin || 0;
       let $arv = document.querySelector(`${ hash }`);
       if($arv){
+        prevTop = self.scrollTop();
         self.arrivalTop = $arv.getBoundingClientRect().top + self.scrollTop() - margin;
         scrtmr = requestAnimationFrame(step);
       }
@@ -128,16 +171,6 @@ export default class simpleSmoothScroll {
       }
       prevTop = self.scrollTop();
     }
-
-    let anchor = document.querySelectorAll('a[href^="#"]');
-    anchor.forEach(($anchor)=>{
-      $anchor.addEventListener('click',(e)=>{
-        count = 0;
-        cancelAnimationFrame(scrtmr);
-        scrchk = requestAnimationFrame(checkScroll);
-      },false);
-    });
-
   }
 
 }
